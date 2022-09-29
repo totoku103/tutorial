@@ -1,5 +1,5 @@
 server:
-  port: 8081
+  port: 8080
 spring:
   cloud:
     gateway:
@@ -7,28 +7,28 @@ spring:
         locator:
           enabled: true
       routes:
-        - id: resource
+        - id: test
           uri: http://localhost:8082
           predicates:
-            - Path=/resource
+            - Path=/test
           filters:
-            - TokenRelay=
+            - JwtAuthentication=read write
   main:
     allow-bean-definition-overriding: true
 
-  security:
-    oauth2:
-      client:
-        provider:
-          humus:
-            authorization-uri: http://192.168.137.1:8000/oauth/authorize
-            token-uri: http://192.168.137.1:8000/oauth/token
-            user-info-uri: http://192.168.137.1:8000/user/me
-        registration:
-          humus:
-            client-id: totoku103
-            client-secret: totoku103
-            redirect-uri: http://192.168.137.1:8000/oauth2/callback/authorization-code
-            authorization-grant-type: authorization_code
-            scope:
-              - read
+#  security:
+#    oauth2:
+#      client:
+#        provider:
+#          humus:
+#            authorization-uri: http://localhost:8080/oauth/authorize2
+#            token-uri: http://localhost:8080/oauth/token
+#            user-info-uri: http://localhost:8080/user/me
+#        registration:
+#          humus:
+#            client-id: clientId
+#            client-secret: secret
+#            redirect-uri: http://localhost:8080/callback
+#            authorization-grant-type: authorization_code
+#            scope:
+#              - read
