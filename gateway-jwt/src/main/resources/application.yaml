@@ -16,7 +16,3 @@ spring:
           filters:
             - JwtAuthentication=read write
 debug: true
-
-jwt:
-  secret: "secret"
-  expiration-second: 28800

@@ -1,9 +1,9 @@
 spring:
   datasource:
-    driver-class-name: org.h2.Driver
-    username: sa
-    password:
-    url: jdbc:h2:~/test
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: totoku103
+    password: totoku103
+    url: jdbc:mysql://home.totoku103.me:33306/oauth2
   main:
     allow-bean-definition-overriding: true
 debug: true
