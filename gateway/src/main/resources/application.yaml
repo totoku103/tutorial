@@ -1,0 +1,34 @@
+server:
+  port: 8081
+spring:
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes:
+        - id: resource
+          uri: http://localhost:8082
+          predicates:
+            - Path=/resource
+          filters:
+            - TokenRelay=
+  main:
+    allow-bean-definition-overriding: true
+
+  security:
+    oauth2:
+      client:
+        provider:
+          humus:
+            authorization-uri: http://192.168.137.1:8000/oauth/authorize
+            token-uri: http://192.168.137.1:8000/oauth/token
+            user-info-uri: http://192.168.137.1:8000/user/me
+        registration:
+          humus:
+            client-id: totoku103
+            client-secret: totoku103
+            redirect-uri: http://192.168.137.1:8000/oauth2/callback/authorization-code
+            authorization-grant-type: authorization_code
+            scope:
+              - read

@@ -1,0 +1,22 @@
+
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:9000
+          jwk-set-uri: http://localhost:9000/oauth2/jwks
+  cloud:
+    gateway:
+      routes:
+        - id: "test"
+          uri: http://localhost:8079
+          predicates:
+            - Path=/test
+          filters:
+            - JwtAuthentication=read write
+debug: true
+
+jwt:
+  secret: "secret"
+  expiration-second: 28800
