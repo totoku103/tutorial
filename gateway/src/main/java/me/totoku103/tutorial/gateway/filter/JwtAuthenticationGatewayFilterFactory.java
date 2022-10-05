@@ -1,7 +1,6 @@
 package me.totoku103.tutorial.gateway.filter;
 
-import lombok.RequiredArgsConstructor;
-import me.totoku103.tutorial.gateway.component.JwtParser;
+import me.totoku103.tutorial.gateway.util.JwtParser;
 import me.totoku103.tutorial.gateway.model.TokenUser;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.cloud.gateway.filter.GatewayFilter;

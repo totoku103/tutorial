@@ -7,6 +7,7 @@ import me.totoku103.tutorial.authorizationold.service.CustomUserDetailService;
 import org.springframework.boot.autoconfigure.batch.BatchProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
@@ -32,20 +33,12 @@ public class AuthorizeConfig extends AuthorizationServerConfigurerAdapter {
     private final DataSource dataSource;
     private final PasswordEncoder passwordEncoder;
     private final CustomUserDetailService customUserDetailService;
+    private final AuthenticationManager authenticationManager;
 
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         clients.jdbc(this.dataSource)
                 .passwordEncoder(passwordEncoder)
-//                .withClient("clientId")
-//                .secret("secret")
-//                .authorizedGrantTypes(AuthorizationGrantType.AUTHORIZATION_CODE.getValue())
-//                .authorizedGrantTypes(AuthorizationGrantType.CLIENT_CREDENTIALS.getValue())
-//                .redirectUris("http://localhost:8080/callback")
-//                .scopes("read", "write")
-//                .accessTokenValiditySeconds(Integer.MAX_VALUE)
-//                .refreshTokenValiditySeconds(Integer.MAX_VALUE)
-//                .and()
                 .build();
     }
 
@@ -56,6 +49,7 @@ public class AuthorizeConfig extends AuthorizationServerConfigurerAdapter {
 
         endpoints
                 .userDetailsService(customUserDetailService)
+                .authenticationManager(authenticationManager)
                 .tokenStore(tokenStore())
                 .tokenEnhancer(tokenEnhancerChain)
                 .accessTokenConverter(jwtAccessTokenConverter());
@@ -83,8 +77,8 @@ public class AuthorizeConfig extends AuthorizationServerConfigurerAdapter {
     @Bean
     public TokenStore tokenStore() {
         return
-//                new JdbcTokenStore(dataSource);
-                new JwtTokenStore(jwtAccessTokenConverter());
+                new JdbcTokenStore(dataSource);
+//                new JwtTokenStore(jwtAccessTokenConverter());
     }
 
     @Bean
