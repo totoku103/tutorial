@@ -1,6 +1,7 @@
 package me.totoku103.tutorial.gateway.filter;
 
-import me.totoku103.tutorial.gateway.component.JwtUtils;
+import lombok.RequiredArgsConstructor;
+import me.totoku103.tutorial.gateway.component.JwtParser;
 import me.totoku103.tutorial.gateway.model.TokenUser;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
@@ -45,13 +46,17 @@ public class JwtAuthenticationGatewayFilterFactory extends AbstractGatewayFilter
             if (!containsAuthorization(request)) {
                 return onError(response, "missing authorization header", HttpStatus.BAD_REQUEST);
             }
-
             final String token = extractToken(request);
+
+            if (!JwtParser.verify(token)) {
+                return onError(response, "invalid token", HttpStatus.UNAUTHORIZED);
+            }
+
             TokenUser tokenUser;
             try {
-                tokenUser = JwtUtils.decode(token);
+                tokenUser = JwtParser.decode(token);
             } catch (Exception e) {
-                return onError(response, "invalid authorization header", HttpStatus.BAD_REQUEST);
+                return onError(response, "invalid payload", HttpStatus.BAD_REQUEST);
             }
 
             if (!hasRole(tokenUser, config.scope)) {
