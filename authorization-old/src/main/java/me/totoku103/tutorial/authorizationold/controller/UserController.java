@@ -7,6 +7,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.PostConstruct;
+import java.util.Map;
+
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -23,6 +26,11 @@ public class UserController {
     @RequestMapping(value = "/callback", method = {RequestMethod.GET, RequestMethod.POST})
     public ResponseEntity<Void> callback(@RequestParam String code, @RequestParam String state) {
         log.info("code: {}, state: {}", code, state);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping
+    public ResponseEntity<Void> addClientInfo(@RequestBody Map<String, String> obj) {
         return ResponseEntity.ok().build();
     }
 }

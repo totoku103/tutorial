@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.totoku103.tutorial.authorizationold.enhancer.CustomTokenEnhancer;
 import me.totoku103.tutorial.authorizationold.service.CustomUserDetailService;
-import org.springframework.boot.autoconfigure.batch.BatchProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,7 +18,6 @@ import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
-import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 
 import javax.sql.DataSource;
 import java.util.List;
@@ -44,15 +42,19 @@ public class AuthorizeConfig extends AuthorizationServerConfigurerAdapter {
 
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
-        TokenEnhancerChain tokenEnhancerChain = new TokenEnhancerChain();
-        tokenEnhancerChain.setTokenEnhancers(List.of(new CustomTokenEnhancer(), jwtAccessTokenConverter()));
-
         endpoints
                 .userDetailsService(customUserDetailService)
                 .authenticationManager(authenticationManager)
                 .tokenStore(tokenStore())
-                .tokenEnhancer(tokenEnhancerChain)
+                .tokenEnhancer(tokenEnhancerChain())
                 .accessTokenConverter(jwtAccessTokenConverter());
+    }
+
+    public TokenEnhancerChain tokenEnhancerChain() {
+        TokenEnhancerChain tokenEnhancerChain = new TokenEnhancerChain();
+        tokenEnhancerChain.setTokenEnhancers(List.of(new CustomTokenEnhancer(), jwtAccessTokenConverter()));
+
+        return tokenEnhancerChain;
     }
 
     @Override
@@ -76,9 +78,7 @@ public class AuthorizeConfig extends AuthorizationServerConfigurerAdapter {
 
     @Bean
     public TokenStore tokenStore() {
-        return
-                new JdbcTokenStore(dataSource);
-//                new JwtTokenStore(jwtAccessTokenConverter());
+        return new JdbcTokenStore(dataSource);
     }
 
     @Bean
@@ -87,4 +87,6 @@ public class AuthorizeConfig extends AuthorizationServerConfigurerAdapter {
         jwtAccessTokenConverter.setSigningKey("jwtKey");
         return jwtAccessTokenConverter;
     }
+
+
 }
