@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.totoku103.tutorial.authorization.enhancer.CustomTokenEnhancer;
 import me.totoku103.tutorial.authorization.service.CustomUserDetailService;
+import me.totoku103.tutorial.authorization.util.Rsa;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,6 +21,8 @@ import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 
 import javax.sql.DataSource;
+import java.security.KeyPair;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 @Slf4j
@@ -83,7 +86,9 @@ public class AuthorizeConfig extends AuthorizationServerConfigurerAdapter {
 
     @Bean
     public JwtAccessTokenConverter jwtAccessTokenConverter() {
+        KeyPair keypair = new Rsa().createKeypair();
         JwtAccessTokenConverter jwtAccessTokenConverter = new JwtAccessTokenConverter();
+//        jwtAccessTokenConverter.setKeyPair(keypair);
         jwtAccessTokenConverter.setSigningKey("jwtKey");
         return jwtAccessTokenConverter;
     }
