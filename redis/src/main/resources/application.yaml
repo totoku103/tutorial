@@ -1,0 +1,15 @@
+spring:
+  redis:
+    cluster:
+      nodes:
+        - 10.147.1.106:6379
+        - 10.147.1.107:6380
+        - 10.147.1.108:6381
+    password: humuson0722
+    lettuce:
+      pool:
+        max-active: 8
+        max-idle: 8
+        min-idle: 0
+        max-wait: -1ms
+      shutdown-timeout: 100ms
