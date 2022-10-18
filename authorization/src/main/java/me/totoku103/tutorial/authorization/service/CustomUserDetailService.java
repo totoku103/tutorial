@@ -1,41 +1,38 @@
 package me.totoku103.tutorial.authorization.service;
 
 import lombok.RequiredArgsConstructor;
-import me.totoku103.tutorial.authorization.entity.WebAdminUser;
-import me.totoku103.tutorial.authorization.repository.WebAdminUserRepository;
+import me.totoku103.tutorial.authorization.entity.UserInfoEntity;
+import me.totoku103.tutorial.authorization.repository.UserInfoRepository;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class CustomUserDetailService implements UserDetailsService {
-
-    private final PasswordEncoder passwordEncoder;
-    private final WebAdminUserRepository webAdminUserRepository;
-
-    @PostConstruct
-    public void init() {
-        WebAdminUser webAdminUser = new WebAdminUser();
-        webAdminUser.setUserLogin("totoku103");
-        webAdminUser.setPassword(passwordEncoder.encode("totoku103"));
-        webAdminUserRepository.save(webAdminUser);
-    }
+    private final UserInfoRepository userInfoRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        WebAdminUser user = webAdminUserRepository.findByUserLogin(username);
-        if(user == null) throw new RuntimeException("not found user");
+        final UserInfoEntity user = userInfoRepository.findByUserId(username);
+        if (user == null) throw new RuntimeException("not found user");
 
-        return User.builder().username(user
-                .getUserLogin())
+        final List<SimpleGrantedAuthority> authorityList =
+                user.getAuthorities()
+                        .stream()
+                        .map(d -> new SimpleGrantedAuthority(d.getAuthority()))
+                        .collect(Collectors.toList());
+
+        return User.builder()
+                .username(user.getUserId())
                 .password(user.getPassword())
-                .authorities(new SimpleGrantedAuthority("resfFul")).build();
+                .authorities(authorityList)
+                .build();
     }
 }

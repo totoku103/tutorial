@@ -6,13 +6,13 @@ import lombok.Setter;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "tb_web_admin_user")
+@Table(name = "tb_user_authority")
 @Getter
 @Setter
-public class WebAdminUser {
+public class UserAuthorityEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-    private String userLogin;
-    private String password;
+    private int idx;
+    private String userId;
+    private String authority;
 }

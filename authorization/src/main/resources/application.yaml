@@ -1,8 +1,8 @@
-
+debug: true
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://home.totoku103.me:33306/oauth_old
+    url: jdbc:mysql://home.totoku103.me:33306/oauth
     username: totoku103
     password: totoku103
   jpa:
@@ -11,7 +11,7 @@ spring:
     show-sql: true
     open-in-view: false
     hibernate:
-      ddl-auto: create
+      ddl-auto: validate
       naming:
         implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
@@ -19,3 +19,14 @@ spring:
     init:
       platform: mysql
       mode: always
+
+
+
+logging:
+  level:
+    org:
+      hibernate:
+        type: trace
+      springframework:
+        jdbc:
+          core: trace

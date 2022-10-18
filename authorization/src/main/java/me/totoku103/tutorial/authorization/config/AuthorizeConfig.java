@@ -22,7 +22,6 @@ import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenCo
 
 import javax.sql.DataSource;
 import java.security.KeyPair;
-import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 @Slf4j
@@ -75,7 +74,10 @@ public class AuthorizeConfig extends AuthorizationServerConfigurerAdapter {
     public DefaultTokenServices defaultTokenServices() {
         DefaultTokenServices defaultTokenServices = new DefaultTokenServices();
         defaultTokenServices.setTokenStore(tokenStore());
-        defaultTokenServices.setReuseRefreshToken(true);
+//        defaultTokenServices.setReuseRefreshToken(false);
+//        defaultTokenServices.setAccessTokenValiditySeconds(10);
+//        defaultTokenServices.setSupportRefreshToken(true);
+//        defaultTokenServices.setRefreshTokenValiditySeconds(10);
         return defaultTokenServices;
     }
 
