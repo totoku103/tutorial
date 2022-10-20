@@ -1,3 +1,4 @@
+
 server:
   port: 8081
 spring:
@@ -10,25 +11,21 @@ spring:
         - id: test1
           uri: http://localhost:8082
           predicates:
-            - Path=/test
+            - Path=/test1
           filters:
-            - JwtAuthentication=mt at
+            - JwtAuthentication=scope_a
+        - id: test2
+          uri: http://localhost:8082
+          predicates:
+            - Path=/test2
+          filters:
+            - JwtAuthentication=scope_b
+        - id: test3
+          uri: http://localhost:8082
+          predicates:
+            - Path=/test3
+          filters:
+            - JwtAuthentication=scope_a scope_b
   main:
     allow-bean-definition-overriding: true
-
-#  security:
-#    oauth2:
-#      client:
-#        provider:
-#          humus:
-#            authorization-uri: http://localhost:8080/oauth/authorize2
-#            token-uri: http://localhost:8080/oauth/token
-#            user-info-uri: http://localhost:8080/user/me
-#        registration:
-#          humus:
-#            client-id: clientId
-#            client-secret: secret
-#            redirect-uri: http://localhost:8080/callback
-#            authorization-grant-type: authorization_code
-#            scope:
-#              - read
+debug: true

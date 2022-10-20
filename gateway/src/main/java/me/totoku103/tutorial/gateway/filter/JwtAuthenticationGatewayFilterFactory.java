@@ -47,8 +47,12 @@ public class JwtAuthenticationGatewayFilterFactory extends AbstractGatewayFilter
             }
             final String token = extractToken(request);
 
-            if (!JwtParser.verify(token)) {
-                return onError(response, "invalid token", HttpStatus.UNAUTHORIZED);
+            try {
+                if (!JwtParser.verify(token)) {
+                    return onError(response, "invalid token", HttpStatus.UNAUTHORIZED);
+                }
+            } catch (Exception e) {
+                return onError(response, String.format("{ \"message\": \"%s\" }", e.getMessage()), HttpStatus.UNAUTHORIZED);
             }
 
             TokenUser tokenUser;

@@ -2,9 +2,9 @@ debug: true
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://home.totoku103.me:33306/oauth
-    username: totoku103
-    password: totoku103
+    url: jdbc:mysql://10.147.1.90:3306/oauth
+    username: imc-dev
+    password: humuson0722
   jpa:
     database-platform: org.hibernate.dialect.MySQL57Dialect
     generate-ddl: true

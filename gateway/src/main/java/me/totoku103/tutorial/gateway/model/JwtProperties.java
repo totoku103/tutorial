@@ -5,8 +5,8 @@ import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
-@Component
-@ConfigurationProperties("jwt")
+//@Component
+//@ConfigurationProperties("jwt")
 @Setter
 @Getter
 public class JwtProperties {

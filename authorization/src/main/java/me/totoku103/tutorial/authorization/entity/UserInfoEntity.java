@@ -14,6 +14,6 @@ public class UserInfoEntity {
     @Id
     private String userId;
     private String password;
-    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "userId", targetEntity = UserAuthorityEntity.class, fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId", targetEntity = UserAuthorityEntity.class, fetch = FetchType.EAGER)
     private Set<UserAuthorityEntity> authorities;
 }

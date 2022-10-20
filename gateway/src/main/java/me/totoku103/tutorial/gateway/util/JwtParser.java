@@ -3,6 +3,7 @@ package me.totoku103.tutorial.gateway.util;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import lombok.extern.slf4j.Slf4j;
 import me.totoku103.tutorial.gateway.model.TokenUser;
@@ -28,6 +29,8 @@ public class JwtParser {
         try {
             verifier.verify(removeBearer(token));
             return true;
+        } catch (TokenExpiredException e) {
+            throw e;
         } catch (Exception e) {
             log.error("exception: {}, token: {}", e, token);
             return false;
@@ -43,6 +46,8 @@ public class JwtParser {
 
         final String id = jwt.getSubject();
         final Set<String> scope = jwt.getClaim(CLAIM_SCOPE).as(HashSet.class);
+
+        log.debug("jwt: {}", jwt);
 
         return new TokenUser(id, scope);
     }
