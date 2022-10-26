@@ -4,24 +4,16 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.totoku103.tutorial.authorization.service.CustomUserDetailService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.*;
-
-import javax.websocket.server.PathParam;
-import java.util.Map;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
+@Deprecated
 @RestController
 @RequiredArgsConstructor
 public class UserController {
-
-    private final CustomUserDetailService customUserDetailService;
-
-    @GetMapping("/user/me")
-    public ResponseEntity<UserDetails> getUserInfo() {
-        UserDetails userDetails = customUserDetailService.loadUserByUsername("totoku103");
-        return ResponseEntity.ok(userDetails);
-    }
 
     @RequestMapping(value = "/callback", method = {RequestMethod.GET, RequestMethod.POST})
     public ResponseEntity<Void> callback(@RequestParam(required = false) String code,
@@ -30,8 +22,4 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping
-    public ResponseEntity<Void> addClientInfo(@RequestBody Map<String, String> obj) {
-        return ResponseEntity.ok().build();
-    }
 }

@@ -71,12 +71,8 @@ public class AuthorizeConfig extends AuthorizationServerConfigurerAdapter {
 
     @Bean
     public DefaultTokenServices defaultTokenServices() {
-        DefaultTokenServices defaultTokenServices = new DefaultTokenServices();
+        final DefaultTokenServices defaultTokenServices = new DefaultTokenServices();
         defaultTokenServices.setTokenStore(tokenStore());
-//        defaultTokenServices.setReuseRefreshToken(false);
-//        defaultTokenServices.setAccessTokenValiditySeconds(10);
-//        defaultTokenServices.setSupportRefreshToken(true);
-//        defaultTokenServices.setRefreshTokenValiditySeconds(10);
         return defaultTokenServices;
     }
 
@@ -87,9 +83,7 @@ public class AuthorizeConfig extends AuthorizationServerConfigurerAdapter {
 
     @Bean
     public JwtAccessTokenConverter jwtAccessTokenConverter() {
-//        KeyPair keypair = new Rsa().createKeypair();
-        JwtAccessTokenConverter jwtAccessTokenConverter = new JwtAccessTokenConverter();
-//        jwtAccessTokenConverter.setKeyPair(keypair);
+        final JwtAccessTokenConverter jwtAccessTokenConverter = new JwtAccessTokenConverter();
         jwtAccessTokenConverter.setSigningKey("jwtKey");
         return jwtAccessTokenConverter;
     }

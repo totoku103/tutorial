@@ -31,7 +31,10 @@ public class CustomClientDetailService implements ClientDetailsService, ClientRe
                         .findById(clientId)
                         .orElseThrow(() -> new UnauthorizedClientException(clientId));
 
-        return new BaseClientDetails(entity.getClientId(), entity.getResourceIds(), entity.getScope(), entity.getAuthorizedGrantTypes(), entity.getAuthorities());
+        BaseClientDetails baseClientDetails = new BaseClientDetails(entity.getClientId(), entity.getResourceIds(), entity.getScope(), entity.getAuthorizedGrantTypes(), entity.getAuthorities(), entity.getWebServerRedirectUri());
+        baseClientDetails.setAccessTokenValiditySeconds(entity.getAccessTokenValidity());
+        baseClientDetails.setRefreshTokenValiditySeconds(entity.getRefreshTokenValidity());
+        return baseClientDetails;
     }
 
     @Override
