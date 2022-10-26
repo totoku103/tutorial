@@ -3,6 +3,7 @@ package me.totoku103.tutorial.authorization.config;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.totoku103.tutorial.authorization.enhancer.CustomTokenEnhancer;
+import me.totoku103.tutorial.authorization.service.CustomClientDetailService;
 import me.totoku103.tutorial.authorization.service.CustomUserDetailService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -31,12 +32,12 @@ public class AuthorizeConfig extends AuthorizationServerConfigurerAdapter {
     private final DataSource dataSource;
     private final PasswordEncoder passwordEncoder;
     private final CustomUserDetailService customUserDetailService;
+    private final CustomClientDetailService customClientDetailService;
     private final AuthenticationManager authenticationManager;
 
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-        clients.jdbc(this.dataSource)
-                .passwordEncoder(passwordEncoder)
+        clients.withClientDetails(customClientDetailService)
                 .build();
     }
 
