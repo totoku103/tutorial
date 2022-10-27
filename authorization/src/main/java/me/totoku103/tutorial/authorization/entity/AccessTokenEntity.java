@@ -6,7 +6,7 @@ import lombok.Setter;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "oauth_access_token")
+@Table(name = "tb_access_token")
 @Getter
 @Setter
 public class AccessTokenEntity {
@@ -15,12 +15,12 @@ public class AccessTokenEntity {
     private long idx;
     private String tokenId;
     @Column(columnDefinition = "blob")
-    private String token;
+    private byte[] token;
     private String authenticationId;
     private String userName;
     private String clientId;
     @Column(columnDefinition = "blob")
-    private String authentication;
+    private byte[] authentication;
     private String refreshToken;
 
 

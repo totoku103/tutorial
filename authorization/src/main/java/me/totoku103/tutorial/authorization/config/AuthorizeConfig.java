@@ -4,9 +4,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.totoku103.tutorial.authorization.enhancer.CustomTokenEnhancer;
 import me.totoku103.tutorial.authorization.service.CustomClientDetailService;
+import me.totoku103.tutorial.authorization.service.CustomTokenStoreService;
 import me.totoku103.tutorial.authorization.service.CustomUserDetailService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
@@ -14,6 +16,7 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.A
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.token.AuthorizationServerTokenServices;
 import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
 import org.springframework.security.oauth2.provider.token.TokenStore;
@@ -33,6 +36,8 @@ public class AuthorizeConfig extends AuthorizationServerConfigurerAdapter {
     private final PasswordEncoder passwordEncoder;
     private final CustomUserDetailService customUserDetailService;
     private final CustomClientDetailService customClientDetailService;
+
+    private final CustomTokenStoreService customTokenStoreService;
     private final AuthenticationManager authenticationManager;
 
     @Override
@@ -49,6 +54,8 @@ public class AuthorizeConfig extends AuthorizationServerConfigurerAdapter {
                 .tokenStore(tokenStore())
                 .tokenEnhancer(tokenEnhancerChain())
                 .accessTokenConverter(jwtAccessTokenConverter());
+
+        endpoints.reuseRefreshTokens(false);
     }
 
     public TokenEnhancerChain tokenEnhancerChain() {
@@ -64,21 +71,25 @@ public class AuthorizeConfig extends AuthorizationServerConfigurerAdapter {
                 .tokenKeyAccess("permitAll()")
                 .checkTokenAccess("isAuthenticated()")
                 .passwordEncoder(passwordEncoder)
+
                 .accessDeniedHandler((request, response, accessDeniedException) -> {
                     log.warn("Access denied. {}", request.getPathInfo());
                 });
     }
 
-    @Bean
+//    @Bean
+//    @Primary
     public DefaultTokenServices defaultTokenServices() {
         final DefaultTokenServices defaultTokenServices = new DefaultTokenServices();
         defaultTokenServices.setTokenStore(tokenStore());
+        defaultTokenServices.setReuseRefreshToken(false);
+        defaultTokenServices.setSupportRefreshToken(true);
         return defaultTokenServices;
     }
 
     @Bean
     public TokenStore tokenStore() {
-        return new JdbcTokenStore(dataSource);
+        return customTokenStoreService;
     }
 
     @Bean
