@@ -5,7 +5,6 @@ import me.totoku103.tutorial.authorization.entity.AccessTokenEntity;
 import me.totoku103.tutorial.authorization.entity.RefreshTokenEntity;
 import me.totoku103.tutorial.authorization.repository.AccessTokenRepository;
 import me.totoku103.tutorial.authorization.repository.RefreshTokenRepository;
-import org.springframework.jdbc.core.support.SqlLobValue;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.common.OAuth2RefreshToken;
 import org.springframework.security.oauth2.common.util.SerializationUtils;
@@ -216,7 +215,7 @@ public class CustomTokenStoreService implements TokenStore {
             }
             return accessToken;
         } catch (IllegalArgumentException e) {
-            log.error("Could not extract access token for authentication " + authentication, e);
+            log.info("Could not extract access token for authentication " + authentication, e);
             return null;
         }
     }
@@ -246,7 +245,7 @@ public class CustomTokenStoreService implements TokenStore {
     public Collection<OAuth2AccessToken> findTokensByClientId(String clientId) {
         final List<AccessTokenEntity> accessTokenEntities = this.accessTokenRepository.findByClientId(clientId);
         if (CollectionUtils.isEmpty(accessTokenEntities)) {
-            log.error("Failed to find access token for clientId " + clientId);
+            log.info("Failed to find access token for clientId " + clientId);
             return new ArrayList<>();
         }
 

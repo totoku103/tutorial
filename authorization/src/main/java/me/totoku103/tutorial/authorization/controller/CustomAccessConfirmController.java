@@ -2,6 +2,8 @@ package me.totoku103.tutorial.authorization.controller;
 
 import lombok.RequiredArgsConstructor;
 import me.totoku103.tutorial.authorization.service.CustomClientDetailService;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.oauth2.provider.AuthorizationRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Controller
 @SessionAttributes("authorizationRequest")
@@ -27,6 +30,12 @@ public class CustomAccessConfirmController {
                                                Principal principal) throws Exception {
         final AuthorizationRequest authorizationRequest = (AuthorizationRequest) model.get("authorizationRequest");
         final String userName = principal.getName();
+        final UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = (UsernamePasswordAuthenticationToken) principal;
+        if(usernamePasswordAuthenticationToken.getPrincipal() instanceof User) {
+            final User userInfo = (User) usernamePasswordAuthenticationToken.getPrincipal();
+            model.put("grant", userInfo.getAuthorities().stream().map(d -> d.getAuthority()).collect(Collectors.joining(",")));
+        }
+
         final String clientId = authorizationRequest.getClientId();
         final String requestPath = ServletUriComponentsBuilder.fromContextPath(request).build().getPath();
         final Map<String, String> scopes = (Map<String, String>) request.getAttribute("scopes");
