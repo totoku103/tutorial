@@ -9,6 +9,7 @@ import me.totoku103.tutorial.authorization.repository.UserInfoRepository;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -21,6 +22,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
+@Profile(value = "local")
 @Order(Ordered.LOWEST_PRECEDENCE)
 @RequiredArgsConstructor
 @ConditionalOnProperty(value = "spring.jpa.hibernate.ddl-auto", havingValue = "create")
