@@ -1,18 +1,29 @@
+debug: true
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://10.147.1.90:3306/oauth
+    username: imc-dev
+    password: humuson0722
   jpa:
     database-platform: org.hibernate.dialect.MySQL57Dialect
     generate-ddl: true
     show-sql: true
     open-in-view: false
     hibernate:
-      ddl-auto: validate
+      ddl-auto: create
       naming:
         implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyJpaCompliantImpl
         physical-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
   sql:
     init:
       platform: mysql
-  thymeleaf:
-    cache: false
+      mode: always
+logging:
+  level:
+    org:
+      hibernate:
+        type: trace
+      springframework:
+        jdbc:
+          core: trace

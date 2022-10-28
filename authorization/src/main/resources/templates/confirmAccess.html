@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="kr"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:tiles="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>권한 요청</title>
+</head>
+<body>
+<div>
+    <span th:text="${clientId}"></span>의 권한 요청합니다.
+</div>
+<div>
+    <form id="confirmationForm" method="post" th:action="${requestPath}">
+        <input name="user_oauth_approval" value="true" type="hidden"/>
+        <div th:each="item: ${items}">
+            <span th:text="${item.key}"></span>
+            <input type="radio" th:name="${item.key}" value="true" th:checked="${item.value} == 'true'">true</input>
+            <input type="radio" th:name="${item.key}" value="false" th:checked="${item.value} == 'false'">false</input>
+        </div>
+        <input name="authorize" value="Authorize" type="submit">
+    </form>
+</div>
+</body>
+</html>
